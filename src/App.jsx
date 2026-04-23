@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import { onAuthStateChanged, getRedirectResult } from "firebase/auth";
 import { auth } from "./firebase";
-import Login from "./components/Login";
-import Chat from "./components/Chat";
+import Login from "./component/Login";
+import Chat from "./component/Chat";
 
 function App() {
   const [user, setUser] = useState(null);
