@@ -1,5 +1,29 @@
+import { useState, useEffect } from "react";
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from "./firebase";
+import Login from "./component/Login";
+import Chat from "./component/Chat";
+
 function App() {
-  return <h1>Chat Room</h1>;
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      setUser(currentUser);
+      setLoading(false);
+    });
+    return () => unsubscribe();
+  }, []);
+
+  if (loading)
+    return (
+      <div className="flex items-center justify-center h-screen bg-gray-950">
+        <div className="text-white text-xl">Loading...</div>
+      </div>
+    );
+
+  return user ? <Chat user={user} /> : <Login />;
 }
 
 export default App;
