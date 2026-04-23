@@ -1,18 +1,24 @@
 import { useState, useEffect } from "react";
-import { onAuthStateChanged } from "firebase/auth";
+import { onAuthStateChanged, getRedirectResult } from "firebase/auth";
 import { auth } from "./firebase";
-import Login from "./component/Login";
-import Chat from "./component/Chat";
+import Login from "./components/Login";
+import Chat from "./components/Chat";
 
 function App() {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    // Handle redirect result when user comes back from Google
+    getRedirectResult(auth).catch((error) => {
+      console.error(error);
+    });
+
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
       setLoading(false);
     });
+
     return () => unsubscribe();
   }, []);
 
